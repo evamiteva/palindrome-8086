@@ -1,0 +1,66 @@
+DATA SEGMENT
+
+BLOCK1 DB 'MALAYALAM'  ; Original string to check for palindrome
+MSG1 DB "IT IS PALINDROME $"  ; Message to display if the string is a palindrome
+MSG2 DB "IT IS NOT PALINDROME $"  ; Message to display if the string is not a palindrome
+PAL DB 00H  ; Variable to store the result (not used in the current code)
+
+DATA ENDS
+
+PRINT MACRO MSG
+MOV AH,09H  ; DOS interrupt to display a string
+LEA DX,MSG  ; Load address of the message into DX
+INT 21H  ; Call DOS interrupt
+INT 3H  ; Breakpoint interrupt (not necessary in final code)
+ENDM
+
+EXTRA SEGMENT
+
+BLOCK2 DB 9 DUP(?)  ; Reserve 9 bytes in EXTRA segment to store the reversed string
+
+EXTRA ENDS
+
+CODE SEGMENT
+ASSUME CS:CODE,DS:DATA,ES:EXTRA
+
+START:
+MOV AX,DATA  ; Load DATA segment address into AX
+MOV DS,AX  ; Move it to DS register
+MOV AX,EXTRA  ; Load EXTRA segment address into AX
+MOV ES,AX  ; Move it to ES register
+
+LEA SI,BLOCK1  ; Load address of BLOCK1 (original string) into SI
+LEA DI,BLOCK2+8  ; Load address of BLOCK2 (end of the reversed string buffer) into DI
+MOV CX,0009H  ; Set loop counter to 9 (length of the string)
+
+BACK:
+CLD  ; Clear direction flag for forward string operation
+LODSB  ; Load byte from DS:SI into AL and increment SI
+STD  ; Set direction flag for reverse string operation
+STOSB  ; Store byte in AL into ES:DI and decrement DI
+LOOP BACK  ; Loop until CX is 0
+
+LEA SI,BLOCK1  ; Reload address of BLOCK1 into SI
+LEA DI,BLOCK2  ; Load start address of BLOCK2 (reversed string) into DI
+MOV CX,0009H  ; Set loop counter to 9
+
+CLD  ; Clear direction flag for forward string comparison
+REPZ CMPSB  ; Compare strings at DS:SI and ES:DI, repeat while equal and CX != 0
+
+JNZ SKIP  ; Jump to SKIP if strings are not equal (ZF=0)
+PRINT MSG1  ; Print "IT IS PALINDROME" if strings are equal
+JMP DONE  ; Jump to DONE to avoid printing both messages
+
+SKIP:
+PRINT MSG2  ; Print "IT IS NOT PALINDROME" if strings are not equal
+
+DONE:
+; Add code to exit program gracefully (not included here)
+
+CODE ENDS
+END START
+
+
+
+
+; [SOURCE]: C:\Users\EVA\Desktop\mycode.asm

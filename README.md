@@ -6,7 +6,8 @@ The program checks whether a given string is a palindrome or not.
 
 ![Screenshot (2)](https://github.com/evamiteva/palindrome-8086/assets/115340958/dc34190c-7f92-42db-8820-25657e91c06e)
 
-![Screenshot (5)](https://github.com/evamiteva/palindrome-8086/assets/115340958/f73c9b39-eee3-48f4-93ee-4b7cc84bd3a0)
+![Screenshot (5)](https://github.com/evamiteva/palindrome-8086/assets/115340958/e19a5b4f-3db1-4573-8d58-51108de46775)
+
 
 **Subject**
 
